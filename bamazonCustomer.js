@@ -70,6 +70,7 @@ function promptUser() {
       .then(function (answer) {
         if (answer.qty <= res[answer.item - 1].stock_quantity) {
           // console.log('order');
+          
           'UPDATE products SET ? WHERE ?',
             [
               {
