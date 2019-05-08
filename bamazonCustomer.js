@@ -68,7 +68,11 @@ function promptUser() {
         }
       ])
       .then(function (answer) {
-        console.log(res[answer.item_id].product_name);
+        if (answer.qty <= res[answer.item -1].stock_quantity) {
+          console.log('order');
+        } else {
+          console.log('cancel order');
+        }
         // connection.query(
         // );
       });

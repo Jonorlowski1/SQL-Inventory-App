@@ -20,8 +20,8 @@ INSERT INTO products
  , stock_quantity
 )
   VALUES
-     ('Bookshelf', 'Furniture', 76.99, 12)
-   , ('Laptop', 'Technology', 455.29, 4)
+    ('Bookshelf', 'Furniture', 76.99, 12)
+  , ('Laptop', 'Technology', 455.29, 4)
  	, ('Dress Shirt', 'Clothing', 29.00, 29)
  	, ('Cat Toy', 'Pets', 4.99, 114)
  	, ('PC Game', 'Technology', 45.99, 22)
