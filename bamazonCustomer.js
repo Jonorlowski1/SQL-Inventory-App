@@ -69,9 +69,16 @@ function promptUser() {
       ])
       .then(function (answer) {
         if (answer.qty <= res[answer.item -1].stock_quantity) {
-          console.log('order');
+          // console.log('order');
+          'UPDATE products SET ? WHERE ?',
+          [
+            {
+              stock_quantity: answer.qty
+            }
+          ]
+          console.log(chalk.white('UPDATED TOTAL: ' + res[answer.item -1].stock_quantity));
         } else {
-          console.log('cancel order');
+          console.log(chalk.red('INSUFFICIENT QUANTITY!'));
         }
         // connection.query(
         // );
