@@ -36,8 +36,6 @@ function displayProducts() {
 };
 
 function promptUser() {
-  // ask for the ID of the products they want to buy
-  // ask how many units of the product they would like to buy
   // if there is not enough inventory, display a phrase like insufficient quantity and then prevent the order from going through
   // if there IS enough inventory, fulfill the order
   // this means updating the SQL database to reflect the remaining quantity
@@ -69,7 +67,8 @@ function promptUser() {
           }
         }
       ])
-      .then(function (res) {
+      .then(function (answer) {
+        console.log(res[answer.qty-1].product_name);
         // connection.query(
         // );
       });
