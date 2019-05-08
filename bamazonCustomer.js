@@ -68,20 +68,22 @@ function promptUser() {
         }
       ])
       .then(function (answer) {
-        if (answer.qty <= res[answer.item -1].stock_quantity) {
+        if (answer.qty <= res[answer.item - 1].stock_quantity) {
           // console.log('order');
           'UPDATE products SET ? WHERE ?',
-          [
-            {
-              stock_quantity: answer.qty
-            }
-          ]
-          console.log(chalk.white('UPDATED TOTAL: ' + res[answer.item -1].stock_quantity));
+            [
+              {
+                stock_quantity: res[answer.item - 1].stock_quantity -= answer.qty
+              },
+              {
+                product_name: res[answer.item - 1]
+              }
+            ]
+          console.log(chalk.white('UPDATED TOTAL: ' + res[answer.item - 1].stock_quantity));
         } else {
           console.log(chalk.red('INSUFFICIENT QUANTITY!'));
         }
-        // connection.query(
-        // );
+        // connection.query();
       });
   });
 };
