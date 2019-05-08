@@ -68,7 +68,7 @@ function promptUser() {
         }
       ])
       .then(function (answer) {
-        console.log(res[answer.qty-1].product_name);
+        console.log(res[answer.item_id].product_name);
         // connection.query(
         // );
       });
