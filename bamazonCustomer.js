@@ -1,7 +1,7 @@
 const mysql = require("mysql");
 const chalk = require("chalk");
 const inquirer = require("inquirer");
-const LINE_BREAK = chalk.red("=").repeat(70);
+const LINE_BREAK = chalk.red("=").repeat(30);
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -15,8 +15,6 @@ connection.connect(function (err) {
   if (err) throw err;
   console.log("connected as id " + connection.threadId);
   displayProducts();
-  promptUser();
-  connection.end();
 });
 
 function displayProducts() {
@@ -33,21 +31,24 @@ function displayProducts() {
     }
     console.log(LINE_BREAK);
   });
+  promptUser();
 };
 
+// function placeOrder() {
+// };
+
 function promptUser() {
-  // if there is not enough inventory, display a phrase like insufficient quantity and then prevent the order from going through
-  // if there IS enough inventory, fulfill the order
   // this means updating the SQL database to reflect the remaining quantity
   // once the update goes through, show the customer the total cost of their purchase.
   connection.query('SELECT * FROM products', function (err, res) {
+    console.log('first select', res);
     if (err) throw err;
     inquirer
       .prompt([
         {
           name: 'item',
           type: 'input',
-          message: 'Enter the ID NUMBER of the product you would like to buy:',
+          message: 'Please enter the ITEM NUMBER of the product you want to buy:',
           validate: function (value) {
             if (isNaN(value) === false) {
               return true;
@@ -68,23 +69,30 @@ function promptUser() {
         }
       ])
       .then(function (answer) {
-        if (answer.qty <= res[answer.item - 1].stock_quantity) {
-          // console.log('order');
-          
-          'UPDATE products SET ? WHERE ?',
-            [
-              {
-                stock_quantity: res[answer.item - 1].stock_quantity -= answer.qty
-              },
-              {
-                product_name: res[answer.item - 1]
-              }
-            ]
+        console.log(answer);
+        // if (answer.qty <= res[answer.item - 1].stock_quantity) {
+          // const matching = arr.filter()
+          // if (matching[0].stock_quantity >= answer.qty)
+          // log maching
+          // placeOrder();
+          connection.query('UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ?', [answer.qty, answer.item], function (err, response) {
+            console.log(err);
+            console.log(response);
+          });
+          // 'UPDATE products SET stock_quantity = ? WHERE item_id = ?',
+          //   [
+          //     {
+          //       stock_quantity: res[answer.item - 1].stock_quantity -= answer.qty
+          //     },
+          //     {
+          //       item_id: res[answer.item].item_id
+          //     }
+          //   ]
           console.log(chalk.white('UPDATED TOTAL: ' + res[answer.item - 1].stock_quantity));
-        } else {
-          console.log(chalk.red('INSUFFICIENT QUANTITY!'));
-        }
-        // connection.query();
+        // } else {
+        //   console.log(chalk.red('INSUFFICIENT QUANTITY!'));
+        // }
+        // return answer;
       });
   });
 };
