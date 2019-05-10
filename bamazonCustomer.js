@@ -41,7 +41,7 @@ function promptUser() {
   // this means updating the SQL database to reflect the remaining quantity
   // once the update goes through, show the customer the total cost of their purchase.
   connection.query('SELECT * FROM products', function (err, res) {
-    console.log('first select', res);
+    // console.log('first select', res);
     if (err) throw err;
     inquirer
       .prompt([
@@ -69,15 +69,22 @@ function promptUser() {
         }
       ])
       .then(function (answer) {
-        console.log(answer);
+        // console.log(res);
+        // console.log(answer);
         // if (answer.qty <= res[answer.item - 1].stock_quantity) {
-          // const matching = arr.filter()
-          // if (matching[0].stock_quantity >= answer.qty)
+          const matchingArr = res.filter(function (number) {
+            console.log('number', number);
+            return number.item_id == answer.item
+          })
+          // console.log(number);
+          console.log('matchingArr', matchingArr)
+          // console.log('answer.item', answer.item)
+          if (matchingArr[0].stock_quantity >= answer.qty) {
           // log maching
-          // placeOrder();
           connection.query('UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ?', [answer.qty, answer.item], function (err, response) {
             console.log(err);
             console.log(response);
+            console.log(chalk.white('UPDATED TOTAL: ' + res[answer.item - 1].stock_quantity));
           });
           // 'UPDATE products SET stock_quantity = ? WHERE item_id = ?',
           //   [
@@ -88,11 +95,11 @@ function promptUser() {
           //       item_id: res[answer.item].item_id
           //     }
           //   ]
-          console.log(chalk.white('UPDATED TOTAL: ' + res[answer.item - 1].stock_quantity));
         // } else {
         //   console.log(chalk.red('INSUFFICIENT QUANTITY!'));
         // }
         // return answer;
+          }
       });
   });
 };
