@@ -87,7 +87,9 @@ function promptUser() {
           connection.query('UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ?', [userQtyRqst, userItemId], function (err, response) {
             // console.log(err);
             // console.log(response);
-            console.log(chalk.white('UPDATED INVENTORY: ', inventory));
+            connection.query('SELECT stock_quantity WHERE item_id = ?', [userItemId], function (err, data) {
+              console.log(chalk.white('UPDATED INVENTORY: ', inventory));
+            });
           });
           // return answer;
         } else {
