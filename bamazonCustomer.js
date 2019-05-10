@@ -69,37 +69,30 @@ function promptUser() {
         }
       ])
       .then(function (answer) {
-        // console.log(res);
-        // console.log(answer);
-        // if (answer.qty <= res[answer.item - 1].stock_quantity) {
-          const matchingArr = res.filter(function (number) {
-            console.log('number', number);
-            return number.item_id == answer.item
-          })
-          // console.log(number);
-          console.log('matchingArr', matchingArr)
-          // console.log('answer.item', answer.item)
-          if (matchingArr[0].stock_quantity >= answer.qty) {
+        const userQtyRqst = answer.qty;
+        const userItemId = answer.item;
+
+        const matchingArr = res.filter(function (number) {
+          // console.log('number', number);
+          return number.item_id == userItemId
+        })
+
+        const price = matchingArr[0].price;
+        const inventory = matchingArr[0].stock_quantity;
+        // console.log(number);
+        // console.log('matchingArr', matchingArr[0])
+        // console.log('answer.item', answer.item)
+        if (inventory >= userQtyRqst) {
           // log maching
-          connection.query('UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ?', [answer.qty, answer.item], function (err, response) {
-            console.log(err);
-            console.log(response);
-            console.log(chalk.white('UPDATED TOTAL: ' + res[answer.item - 1].stock_quantity));
+          connection.query('UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ?', [userQtyRqst, userItemId], function (err, response) {
+            // console.log(err);
+            // console.log(response);
+            console.log(chalk.white('UPDATED INVENTORY: ', inventory));
           });
-          // 'UPDATE products SET stock_quantity = ? WHERE item_id = ?',
-          //   [
-          //     {
-          //       stock_quantity: res[answer.item - 1].stock_quantity -= answer.qty
-          //     },
-          //     {
-          //       item_id: res[answer.item].item_id
-          //     }
-          //   ]
-        // } else {
-        //   console.log(chalk.red('INSUFFICIENT QUANTITY!'));
-        // }
-        // return answer;
-          }
+          // return answer;
+        } else {
+          console.log(chalk.red('INSUFFICIENT QUANTITY!'));
+        }
       });
   });
 };
