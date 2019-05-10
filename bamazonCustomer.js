@@ -86,14 +86,17 @@ function promptUser() {
           // log maching
           connection.query('UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ?', [userQtyRqst, userItemId], function (err, response) {
             connection.query('SELECT stock_quantity FROM products WHERE item_id = ?', [userItemId], function (err, data) {
-              console.log(data[0].stock_quantity);
-              // console.log(data[userItemId].stock_quantity);
-              // console.log(chalk.white('UPDATED INVENTORY: ', inventory));
+              const newStockQty = data[0].stock_quantity;
+              console.log(chalk.white('UPDATED INVENTORY: ', newStockQty));
+
+              console.log(chalk.green('TOTAL PRICE: ') + chalk.yellow('$' + price * userQtyRqst));
+              connection.end();
             });
           });
           // return answer;
         } else {
-          console.log(chalk.red('INSUFFICIENT QUANTITY!'));
+          console.log(chalk.red('INSUFFICIENT QUANTITY! \nPlease try again.'));
+          connection.end();
         }
       });
   });
